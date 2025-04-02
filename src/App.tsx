@@ -5,6 +5,9 @@ import NonEssentialResult from "./components/NonEssentialResult";
 import WaitingList from "./components/WaitingList";
 import { PurchaseItem } from "./types";
 
+// Storage key constant to ensure consistency
+const STORAGE_KEY = "coolingOffItems";
+
 function App() {
   const [essentialResult, setEssentialResult] = useState<PurchaseItem | null>(
     null
@@ -12,22 +15,67 @@ function App() {
   const [nonEssentialResult, setNonEssentialResult] =
     useState<PurchaseItem | null>(null);
   const [waitingList, setWaitingList] = useState<PurchaseItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Load waiting list from localStorage on component mount
   useEffect(() => {
-    const savedItems = localStorage.getItem("coolingOffItems");
-    if (savedItems) {
-      try {
-        setWaitingList(JSON.parse(savedItems));
-      } catch (error) {
-        console.error("Error parsing saved items:", error);
+    try {
+      const savedItems = localStorage.getItem(STORAGE_KEY);
+      if (savedItems) {
+        const parsedItems = JSON.parse(savedItems);
+        // Validate that it's an array before setting state
+        if (Array.isArray(parsedItems)) {
+          setWaitingList(parsedItems);
+        } else {
+          console.error("Saved items is not an array:", parsedItems);
+          // Initialize with empty array if data is invalid
+          setWaitingList([]);
+        }
       }
+    } catch (error) {
+      console.error("Error parsing saved items:", error);
+      // Initialize with empty array if there's an error
+      setWaitingList([]);
+    } finally {
+      // Mark as loaded regardless of outcome
+      setIsLoaded(true);
     }
   }, []);
 
   // Save waiting list to localStorage whenever it changes
+  // Only run after initial load to prevent overwriting with empty array
   useEffect(() => {
-    localStorage.setItem("coolingOffItems", JSON.stringify(waitingList));
+    if (isLoaded) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(waitingList));
+      } catch (error) {
+        console.error("Error saving to localStorage:", error);
+      }
+    }
+  }, [waitingList, isLoaded]);
+
+  // Add an effect to update expired items
+  useEffect(() => {
+    // Check once per minute if any items have completed their cooling period
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      let hasExpiredItems = false;
+
+      // Check each item for expiration
+      waitingList.forEach((item) => {
+        if (item.targetDate && new Date(item.targetDate) <= now) {
+          hasExpiredItems = true;
+        }
+      });
+
+      // If we found expired items, update the UI to reflect this
+      if (hasExpiredItems) {
+        // Force a re-render without changing the data
+        setWaitingList([...waitingList]);
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(intervalId);
   }, [waitingList]);
 
   const handleFormSubmit = (item: PurchaseItem) => {
@@ -43,7 +91,12 @@ function App() {
   };
 
   const addToWaitingList = (item: PurchaseItem) => {
-    setWaitingList([...waitingList, item]);
+    // Add a unique ID to each item to help with management
+    const itemWithId = {
+      ...item,
+      id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    };
+    setWaitingList([...waitingList, itemWithId]);
     setNonEssentialResult(null);
   };
 

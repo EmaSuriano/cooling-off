@@ -20,13 +20,19 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
       return;
     }
 
+    const waitingPeriod = determineWaitingPeriod(price);
+    const createdDate = new Date();
+    const targetDate = calculateTargetDate(waitingPeriod, createdDate);
+
     const purchaseItem: PurchaseItem = {
       itemName,
       itemPrice: price,
       isEssential,
       itemReason: itemReason || "No reason provided",
-      waitingPeriod: determineWaitingPeriod(price),
-      reminderDate: calculateReminderDate(determineWaitingPeriod(price)),
+      waitingPeriod,
+      createdDate: createdDate.toISOString(),
+      targetDate: targetDate.toISOString(),
+      reminderDate: targetDate.toLocaleDateString(),
     };
 
     onSubmit(purchaseItem);
@@ -47,21 +53,24 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
     }
   };
 
-  // Calculate the reminder date based on waiting period
-  const calculateReminderDate = (waitingPeriod: string): string => {
-    const today = new Date();
+  // Calculate the target date based on waiting period
+  const calculateTargetDate = (
+    waitingPeriod: string,
+    startDate: Date
+  ): Date => {
+    const targetDate = new Date(startDate);
 
     if (waitingPeriod === "24 hours") {
-      today.setDate(today.getDate() + 1);
+      targetDate.setDate(targetDate.getDate() + 1);
     } else if (waitingPeriod === "48 hours") {
-      today.setDate(today.getDate() + 2);
+      targetDate.setDate(targetDate.getDate() + 2);
     } else if (waitingPeriod === "1 week") {
-      today.setDate(today.getDate() + 7);
+      targetDate.setDate(targetDate.getDate() + 7);
     } else {
-      today.setDate(today.getDate() + 30);
+      targetDate.setDate(targetDate.getDate() + 30);
     }
 
-    return today.toLocaleDateString();
+    return targetDate;
   };
 
   return (
@@ -78,7 +87,9 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
           id="item-name"
           value={itemName}
           onChange={(e) => setItemName(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm 
+                     text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700
+                     focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           required
           placeholder="e.g., Wireless headphones"
         />
@@ -96,7 +107,9 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
           id="item-price"
           value={itemPrice}
           onChange={(e) => setItemPrice(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm 
+                     text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700
+                     focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           required
           min="0"
           step="0.01"
@@ -115,7 +128,9 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
           id="item-essential"
           value={isEssential}
           onChange={(e) => setIsEssential(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm 
+                     text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700
+                     focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           required
         >
           <option value="">-- Please select --</option>
@@ -137,7 +152,9 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
           value={itemReason}
           onChange={(e) => setItemReason(e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm 
+                     text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700
+                     focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="e.g., My current headphones are broken and I need them for work calls"
         />
       </div>

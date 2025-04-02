@@ -26,7 +26,7 @@ const EssentialResult = ({ item, onAddToEssentials }: EssentialResultProps) => {
         <li className="mb-1">Does this fit within your current budget?</li>
       </ul>
 
-      <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 shadow-sm">
         <h3 className="font-medium text-lg mb-2">{item.itemName}</h3>
         <p className="mb-1">Price: ${item.itemPrice.toFixed(2)}</p>
         <p>Reason: {item.itemReason}</p>
