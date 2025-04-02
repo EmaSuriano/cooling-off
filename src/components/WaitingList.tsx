@@ -1,4 +1,4 @@
-import { PurchaseItem } from '../types';
+import { PurchaseItem } from "../types";
 
 interface WaitingListProps {
   items: PurchaseItem[];
@@ -8,7 +8,7 @@ interface WaitingListProps {
 const WaitingList = ({ items, onRemoveItem }: WaitingListProps) => {
   if (items.length === 0) {
     return (
-      <p className="text-gray-500">
+      <p className="text-gray-500 dark:text-gray-400">
         Items you're considering will appear here.
       </p>
     );
@@ -24,7 +24,7 @@ const WaitingList = ({ items, onRemoveItem }: WaitingListProps) => {
           <div>
             <p className="font-medium">{item.itemName}</p>
             <p className="text-sm text-gray-600">
-              ${item.itemPrice.toFixed(2)} • Waiting until: {item.reminderDate}{' '}
+              ${item.itemPrice.toFixed(2)} • Waiting until: {item.reminderDate}{" "}
               ({item.waitingPeriod})
             </p>
           </div>

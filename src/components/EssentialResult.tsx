@@ -1,4 +1,4 @@
-import { PurchaseItem } from '../types';
+import { PurchaseItem } from "../types";
 
 interface EssentialResultProps {
   item: PurchaseItem;
@@ -7,7 +7,7 @@ interface EssentialResultProps {
 
 const EssentialResult = ({ item, onAddToEssentials }: EssentialResultProps) => {
   return (
-    <div className="bg-green-50 border-l-4 border-green-500 rounded-lg shadow-md p-6 mb-8 animate-fade-in">
+    <div className="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 rounded-lg shadow-md p-6 mb-8 animate-fade-in">
       <h2 className="text-xl font-semibold mb-4">Purchase Assessment</h2>
       <p className="mb-2">
         You've indicated this is an <strong>essential purchase</strong>.

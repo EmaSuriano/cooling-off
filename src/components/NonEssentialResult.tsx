@@ -1,4 +1,4 @@
-import { PurchaseItem } from '../types';
+import { PurchaseItem } from "../types";
 
 interface NonEssentialResultProps {
   item: PurchaseItem;
@@ -10,7 +10,7 @@ const NonEssentialResult = ({
   onAddToWaitlist,
 }: NonEssentialResultProps) => {
   return (
-    <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg shadow-md p-6 mb-8 animate-fade-in">
+    <div className="bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-500 rounded-lg shadow-md p-6 mb-8 animate-fade-in">
       <h2 className="text-xl font-semibold mb-4">
         Cooling-Off Period Recommended
       </h2>

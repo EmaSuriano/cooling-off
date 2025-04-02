@@ -1,22 +1,22 @@
-import { useState, FormEvent } from 'react';
-import { PurchaseItem } from '../types';
+import { useState, FormEvent } from "react";
+import { PurchaseItem } from "../types";
 
 interface PurchaseFormProps {
   onSubmit: (item: PurchaseItem) => void;
 }
 
 const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
-  const [itemName, setItemName] = useState('');
-  const [itemPrice, setItemPrice] = useState('');
-  const [isEssential, setIsEssential] = useState('');
-  const [itemReason, setItemReason] = useState('');
+  const [itemName, setItemName] = useState("");
+  const [itemPrice, setItemPrice] = useState("");
+  const [isEssential, setIsEssential] = useState("");
+  const [itemReason, setItemReason] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const price = parseFloat(itemPrice);
     if (isNaN(price) || price < 0) {
-      alert('Please enter a valid price');
+      alert("Please enter a valid price");
       return;
     }
 
@@ -24,7 +24,7 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
       itemName,
       itemPrice: price,
       isEssential,
-      itemReason: itemReason || 'No reason provided',
+      itemReason: itemReason || "No reason provided",
       waitingPeriod: determineWaitingPeriod(price),
       reminderDate: calculateReminderDate(determineWaitingPeriod(price)),
     };
@@ -37,13 +37,13 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
   // Determine appropriate waiting period based on price
   const determineWaitingPeriod = (price: number): string => {
     if (price < 50) {
-      return '24 hours';
+      return "24 hours";
     } else if (price < 100) {
-      return '48 hours';
+      return "48 hours";
     } else if (price < 500) {
-      return '1 week';
+      return "1 week";
     } else {
-      return '30 days';
+      return "30 days";
     }
   };
 
@@ -51,11 +51,11 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
   const calculateReminderDate = (waitingPeriod: string): string => {
     const today = new Date();
 
-    if (waitingPeriod === '24 hours') {
+    if (waitingPeriod === "24 hours") {
       today.setDate(today.getDate() + 1);
-    } else if (waitingPeriod === '48 hours') {
+    } else if (waitingPeriod === "48 hours") {
       today.setDate(today.getDate() + 2);
-    } else if (waitingPeriod === '1 week') {
+    } else if (waitingPeriod === "1 week") {
       today.setDate(today.getDate() + 7);
     } else {
       today.setDate(today.getDate() + 30);
@@ -69,7 +69,7 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
       <div className="mb-4">
         <label
           htmlFor="item-name"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
           What do you want to buy?
         </label>
@@ -87,7 +87,7 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
       <div className="mb-4">
         <label
           htmlFor="item-price"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
           Price ($)
         </label>
@@ -107,7 +107,7 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
       <div className="mb-4">
         <label
           htmlFor="item-essential"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
           Is this purchase essential?
         </label>
@@ -128,7 +128,7 @@ const PurchaseForm = ({ onSubmit }: PurchaseFormProps) => {
       <div className="mb-6">
         <label
           htmlFor="item-reason"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
           Why do you want this item?
         </label>
